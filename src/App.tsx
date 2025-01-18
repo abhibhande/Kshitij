@@ -5,8 +5,9 @@ import { Label } from './components/ui/label'
 import { Button } from './components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/ui/card'
 import { Input } from './components/ui/input'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Navbar from './components/Navbar/page'
+import { apiCall } from './api_utils/apiCall'
 export default function App() {
 
 
@@ -18,9 +19,45 @@ export default function App() {
   // );
 
   const [showNav, setShowNav] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 function handlelogin() {
-    setShowNav(true);
+  console.log("Email : ",email);
+  apiCall('http://localhost:8080/api/users/login?email='+email+'&password='+password, 'POST', {}, {  }).then((response) => {
+      console.log("Response : ",response);
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        setUserPreferences(response.userPreferences);
+      }
+    });
 }
+
+function handleRegister() {
+  console.log("Email : ",email);
+  apiCall('http://localhost:8080/api/users/register', 'POST', {}, { name,email,password }).then((response) => {
+      console.log("Response : ",response);
+      if (response!=="SUCCESS") {
+        alert("User already exists");
+      }
+    });
+}
+
+const handleInputChange = (e:any) => {
+  setEmail(e.target.value); // Update the state with the input value
+};
+
+
+const handlePasswordChange = (e:any) => {
+  setPassword(e.target.value); // Update the state with the input value
+};
+
+const handleNameChange = (e:any) => {
+  setName(e.target.value); // Update the state with the input value
+}
+
+const [userPreferences, setUserPreferences] = useState(null);
+
   return (
     <div className="App "> 
     {!showNav?(
@@ -39,12 +76,12 @@ function handlelogin() {
            </CardHeader>
            <CardContent className="space-y-2">
              <div className="space-y-1">
-               <Label htmlFor="name">Name</Label>
-               <Input id="name" defaultValue="Pedro Duarte" />
+               <Label htmlFor="name">Email</Label>
+               <Input id="email" defaultValue="test@mail.com" value={email} onChange={handleInputChange}/>
              </div>
              <div className="space-y-1">
                <Label htmlFor="password">Password</Label>
-               <Input id="password" type='password' defaultValue="@peduarte" />
+               <Input id="password" type='password' defaultValue="@peduarte"value={password} onChange={handlePasswordChange} />
              </div>
            </CardContent>
            <CardFooter>
@@ -63,19 +100,19 @@ function handlelogin() {
            <CardContent className="space-y-2">
              <div className="space-y-1">
                <Label htmlFor="name">Name </Label>
-               <Input id="name" type="text" />
+               <Input id="name" type="text" value={name} onChange={handleNameChange}/>
              </div>
              <div className="space-y-1">
                <Label htmlFor="mail">Mail-id</Label>
-               <Input id="mail" type="mail" />
+               <Input id="mail" type="mail" value={email} onChange={handleInputChange}/>
              </div>
              <div className="space-y-1">
                <Label htmlFor="password">Password</Label>
-               <Input id="password" type="mail" />
+               <Input id="password" type="mail" value={password} onChange={handlePasswordChange}/>
              </div>
            </CardContent>
            <CardFooter>
-             <Button >Register</Button>
+             <Button onClick={handleRegister}>Register</Button>
            </CardFooter>
          </Card>
        </TabsContent>
@@ -87,3 +124,5 @@ function handlelogin() {
     </div>
   )
 }
+
+

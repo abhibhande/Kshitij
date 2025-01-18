@@ -1,96 +1,110 @@
-import {
-  Card,
-  CardTitle,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { ArrowRight, BookmarkCheck } from "lucide-react"
-import './css/task.css'
-import { Progress } from "./ui/progress"
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge"; // Placeholder for an icon component from ShadcnUI
+import { Card } from "@/components/ui/card"; // Placeholder for flip animation component, replace with actual component
+import { MdCheckCircle, MdPending, MdHourglassEmpty } from "react-icons/md"; // Use relevant icons
+import "@/components/css/task.css"; // Ensure this file includes corner styling
 
+type Task = {
+  id: string;
+  date: Date;
+  status: "Completed" | "Pending" | "InProcess";
+  description: string;
+};
+let borderColor = "";
+let cornerClass = "";
 
-export function Task(props: { id: any,title:string,dueDate:string,completeTask:any }) {
-    console.log("props",props);
-    console.log("dueDate",props.dueDate);
-    const date = props.dueDate.split(":")[0];
-    // const storageKey = `lastClickTime-${props.id}`;
-    // const [timeDifference, setTimeDifference] = useState<number | null>(null);
-    // const [isPaused, setIsPaused] = useState(true);
-    // const updatePause = (status?:any) =>{
-    //     if(status){
-    //         handleButtonClick();
-    //     }
-    //     setIsPaused(status);
-    // }
-    // useEffect(() => {
-    //     const storedTime = localStorage.getItem(storageKey);
-    //     if (storedTime) {
-    //       const previousTime = parseInt(storedTime, 10);
-    //       const difference = Date.now() - previousTime;
-    //       setTimeDifference(difference);
-    //       updatePause(false);
-    //     }
-    //   }, []); 
+const TaskPage = () => {
+  const allTasks: Task[] = [
+    { id: "1", date: new Date("2023-10-01"), status: "Completed", description: "This is a completed task description." },
+    { id: "2", date: new Date("2023-10-02"), status: "Pending", description: "This is a pending task description." },
+    { id: "3", date: new Date("2023-10-03"), status: "InProcess", description: "This is a task that is in process." },
+  ];
 
-    
-    
-    //     const handleButtonClick = () => {
-    //       const currentTime = Date.now(); // Current time in milliseconds
-    //       const storageKey = `lastClickTime-${props.id}`; // Unique key for each button
-      
-    //       // Check if there's a previously stored time for this button
-    //       const storedTime = localStorage.getItem(storageKey);
-    //     console.log("storedTime",storedTime);
-    //       if (storedTime) {
-    //         const previousTime = parseInt(storedTime, 10);
-    //         const difference = currentTime - previousTime; // Time difference in milliseconds
-    //         setTimeDifference(difference);
-      
-    //         // Optionally: Log the time difference in seconds
-    //         console.log(
-    //           `Time difference for button ${props.id}: ${Math.floor(difference / 1000)} seconds`
-    //         );
-    //       } else {
-    //         setTimeDifference(null);
-    //       }
-      
-    //       // Store the current time in localStorage with the button's unique key
-    //       localStorage.setItem(storageKey, currentTime.toString());
-    //     };
+  const [tasks] = useState<Task[]>(allTasks);
+
+  const getStatusBadge = (status: "Completed" | "Pending" | "InProcess") => {
+ 
+
+    switch (status) {
+      case "Completed":
+        borderColor = "2px solid green";
+        cornerClass = "cornerGreen"; 
+        return (
+          <Badge color="green" className="mr-2">
+            <MdCheckCircle /> Completed
+          </Badge>
+        );
+      case "Pending":
+        borderColor = "2px solid red";
+        cornerClass = "cornerRed"; 
+        return (
+          <Badge style={{ backgroundColor: "red" }} className="mr-2">
+            <MdPending /> Pending
+          </Badge>
+        );
+      case "InProcess":
+        borderColor = "2px solid yellow";
+        cornerClass = "cornerYellow"; // Ensure this class exists in your CSS
+        return (
+          <Badge color="yellow" className="mr-2">
+            <MdHourglassEmpty /> In Process
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <Card className="w-[350px]" style={{backgroundColor:"white"}}>
-        <div className="flex justify-left items-top">
-            <BookmarkCheck size={65} color="#000" style={{margin:"2px", padding:"1px"}}/>
-            <div style={{display:"block"}}>
-                <Label className="mt-[3px] mr-[10px] mb-[5px] link hover-pointer hover-color-change" style={{color:"#878787"}}>#TestNo</Label>
-                <Label className="task-header">
-                    {(props.title.length>40)?(props.title.substring(0,40)+"..."):props.title}
-                </Label>
-                </div>
-            <div style={{marginTop:"6px"}}>
-                <CardTitle className="date-text">
-                        {props.dueDate.split("/")[0]}
-                </CardTitle>
-                <label className="date-sm-text">{date.split("/")[1]+"/"+date.split("/")[2]}</label>
-            </div>
-        </div>
-        <div className="flex justify-left items-top mt-[10px]">
-            <Progress value={33} className="progress-bar w-[60%] ml-[12px] mb-[10px] mt-[10px]"><div
-            className="h-full bg-blue-500"
-            style={{ width: '50%' }}
-            /></Progress>
+    <div className="p-4">
+      <h1 className="text-2xl mb-4">Tasks</h1>
+        <input type='hidden' value={cornerClass}/>
+        <input type='hidden' value={borderColor}/>
+      <div className="space-y-4">
+        {tasks.map((task) => {
+          const { id, date, status, description } = task;
+          let borderColor = "";
+          let cornerClass = "";
 
-            <Label className="mt-[3px] ml-[15%] hover-pointer" style={{color:"#1565C0"}} onClick={()=>props.completeTask(props.id)}>Complete</Label>
-            <ArrowRight color="#1565C0" className="ml-[5px]"/> 
-        </div>
-        <div className="flex justify-left items-top mt-[5px]">
-            {/* {isPaused ? (
-                <Play color="white" className="ml-[10px] mb-[5px] hover-pointer" onClick={()=>updatePause(false)}/> 
-            ) : (
-                <Pause color="white" className="ml-[10px] mb-[5px] hover-pointer" onClick={()=>updatePause(true)}/>
-            )} */}
-            <Label className="ml-[20px] mb-[10px]" style={{color:"#A5A5A5 "}}>10</Label>
-        </div>
-    </Card>
-  )
-    }
+          switch (status) {
+            case "Completed":
+              borderColor = "2px solid green";
+              cornerClass = "cornerGreen";
+              break;
+            case "Pending":
+              borderColor = "2px solid red";
+              cornerClass = "cornerRed";
+              break;
+            case "InProcess":
+              borderColor = "2px solid yellow";
+              cornerClass = "cornerYellow";
+              break;
+          }
+
+          const statusBadge = getStatusBadge(status);
+
+          return (
+            <Card
+              key={id}
+              className={`p-4 shadow-lg hover:shadow-xl transition-shadow ${cornerClass}`}
+              style={{ borderLeft: borderColor }}
+            >
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  {statusBadge}
+                  <span className="font-semibold text-lg">{date.toDateString()}</span>
+                </div>
+              </div>
+
+              <div className="transition-all duration-300">
+                <p className="text-sm mt-2">{description}</p>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default TaskPage;

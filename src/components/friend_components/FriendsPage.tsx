@@ -1,178 +1,76 @@
-
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import FriendList from "./FriendsList";
-import "@/App.css";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody } from "@/components/ui/table";
+import FriendList from "./FriendsList";
+import "@/components/css/friends.css";
 
 type Friend = {
   id: string;
   name: string;
   imgUrl: string;
-  btnAction: "Remove" | "Accept" | "Request";
+  btnAction: "Follow" | "Unfollow";
 };
 
 const FriendPage = () => {
-  // Sample data with unique IDs
-  const friends: Friend[] = [
-    {
-      id: "1",
-      name: "Amit Patil",
-      imgUrl: "https://github.com/shadcn.png",
-      btnAction: "Remove",
-    },
-    {
-      id: "2",
-      name: "Abhishek Bhande",
-      imgUrl: "https://github.com/shadcn.png",
-      btnAction: "Remove",
-    },
+  // Sample data with unique IDs and "Follow" / "Unfollow" actions
+  const allFriends: Friend[] = [
+    { id: "1", name: "Amit Patil", imgUrl: "https://github.com/shadcn.png", btnAction: "Follow" },
+    { id: "2", name: "Abhishek Bhande", imgUrl: "https://github.com/shadcn.png", btnAction: "Unfollow" },
+    { id: "3", name: "Mrudul Ahirrao", imgUrl: "https://github.com/shadcn.png", btnAction: "Follow" },
+    { id: "4", name: "Kiran Gawali", imgUrl: "https://github.com/shadcn.png", btnAction: "Follow" },
+    { id: "5", name: "Tanmay Shindkar", imgUrl: "https://github.com/shadcn.png", btnAction: "Unfollow" },
   ];
 
-  const requests: Friend[] = [
-    {
-      id: "3",
-      name: "Mrudul Ahirrao",
-      imgUrl: "https://github.com/shadcn.png",
-      btnAction: "Accept",
-    },
-  ];
+  // Filters and selected data
+  const [activeFilter, setActiveFilter] = useState<string>("All");
+  const [filteredData, setFilteredData] = useState<Friend[]>(allFriends);
 
-  const findFriends: Friend[] = [
-    {
-      id: "4",
-      name: "Kiran Gawali",
-      imgUrl: "https://github.com/shadcn.png",
-      btnAction: "Request",
-    },
-    {
-      id: "5",
-      name: "Tanmay Shindkar",
-      imgUrl: "https://github.com/shadcn.png",
-      btnAction: "Request",
-    },
-  ];
+  // Handle filter selection
+  const handleFilterClick = (filter: string) => {
+    setActiveFilter(filter);
 
-  // Handle button action based on unique ID and action type
-  const handleAction = (
-    id: string,
-    action: "Remove" | "Accept" | "Request"
-  ) => {
-    console.log(`Action: ${action}, ID: ${id}`);
-    alert(`Action: ${action}, ID: ${id}`);
-  };
-
-  // State for filtered data
-  const [filteredFriends, setFilteredFriends] = useState(friends);
-  const [filteredRequests, setFilteredRequests] = useState(requests);
-  const [filteredFindFriends, setFilteredFindFriends] = useState(findFriends);
-
-  // Handle search functionality
-  const handleSearch = (query: string) => {
-    const lowercasedQuery = query.toLowerCase();
-
-    // Filter friends
-    const filteredFriendsList = friends.filter((friend) =>
-      friend.name.toLowerCase().includes(lowercasedQuery)
-    );
-
-    // Filter requests
-    const filteredRequestsList = requests.filter((request) =>
-      request.name.toLowerCase().includes(lowercasedQuery)
-    );
-
-    // Filter find friends
-    const filteredFindFriendsList = findFriends.filter((friend) =>
-      friend.name.toLowerCase().includes(lowercasedQuery)
-    );
-
-    // Update state with filtered data
-    setFilteredFriends(filteredFriendsList);
-    setFilteredRequests(filteredRequestsList);
-    setFilteredFindFriends(filteredFindFriendsList);
+    if (filter === "All") {
+      setFilteredData(allFriends);
+    } else if (filter === "Following") {
+      setFilteredData(allFriends.filter((friend) => friend.btnAction === "Unfollow"));
+    } else if (filter === "Not Following") {
+      setFilteredData(allFriends.filter((friend) => friend.btnAction === "Follow"));
+    }
   };
 
   return (
-    <Tabs defaultValue="Friends" className="w-[300px]">
-      <TabsList className="grid w-full grid-cols-3 gap-1">
-        <TabsTrigger value="Friends" className="bg-gray-200">
-          Friends
-        </TabsTrigger>
-        <TabsTrigger value="Requests" className="bg-gray-200">
-          Requests [{filteredRequests.length}]
-        </TabsTrigger>
-        <TabsTrigger value="FindFriends" className="bg-gray-200">
-          Find Friends
-        </TabsTrigger>
-      </TabsList>
+    <div className="p-4">
+      {/* Horizontal Filters */}
+      <div className="flex space-x-4 pb-4 overflow-x-auto hide-scrollbar sticky top-0 z-10 bg-white pt-4">
+        {["All", "Following", "Not Following"].map((filter) => (
+          <Button
+            key={filter}
+            variant={activeFilter === filter ? "default" : "outline"}
+            className={`text-sm px-4 py-2 rounded-full border ${
+              activeFilter === filter ? "bg-black text-white" : "bg-transparent border-gray-300"
+            } `}
+            onClick={() => handleFilterClick(filter)}
+          >
+            {filter}
+          </Button>
+        ))}
+      </div>
 
-      <TabsContent value="Friends">
-        <div className="h-[300px] overflow-y-auto no-horizontal-scroll custom-scrollbar">
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Input
-                    type="text"
-                    placeholder="Search"
-                    onChange={(e) => handleSearch(e.target.value)}
-                  />
-                </TableCell>
-              </TableRow>
-              {filteredFriends.map((friend) => (
-                <FriendList
-                  key={friend.id}
-                  data={friend}
-                  onAction={handleAction}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </TabsContent>
-
-      <TabsContent value="Requests">
-        <div className="h-[300px] overflow-y-auto no-horizontal-scroll custom-scrollbar">
-          <Table>
-            <TableBody>
-              {filteredRequests.map((request) => (
-                <FriendList
-                  key={request.id}
-                  data={request}
-                  onAction={handleAction}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </TabsContent>
-
-      <TabsContent value="FindFriends">
-        <div className="h-[300px] overflow-y-auto no-horizontal-scroll custom-scrollbar">
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Input
-                    type="text"
-                    placeholder="Search"
-                    onChange={(e) => handleSearch(e.target.value)}
-                  />
-                </TableCell>
-              </TableRow>
-              {filteredFindFriends.map((friend) => (
-                <FriendList
-                  key={friend.id}
-                  data={friend}
-                  onAction={handleAction}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </TabsContent>
-    </Tabs>
+      {/* Filtered Data Display */}
+      <div className="h-[300px] overflow-y-auto mt-4">
+        <Table>
+          <TableBody>
+            {filteredData.map((friend) => (
+              <FriendList
+                key={friend.id}
+                data={friend}
+                onAction={(id, action) => console.log(`Action: ${action}, ID: ${id}`)}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

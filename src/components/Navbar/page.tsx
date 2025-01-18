@@ -1,4 +1,4 @@
-import { Bell, Link } from "lucide-react";
+import { Bell, Send } from "lucide-react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
@@ -35,9 +35,23 @@ export default function Navbar() {
         </div>
 
         <div className="inline-block items-center space-x-2">
+           <Button variant="secondary">
+            <Send size={24}/>
+          </Button>
+
+          <div className="relative inline-block">
+            <Button variant="secondary" onClick={handleNotificationClick}>
+              <Bell size={24} />
+            </Button>
+            {/* Notification count badge */}
+            <Badge className="absolute -top-2 -right-2 bg-red-500 text-white">
+              3
+            </Badge>
+            
+          </div>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="secondary" className="mr-2">
+              <Button variant="default" className="mr-2">
                 +add
               </Button>
             </PopoverTrigger>
@@ -68,20 +82,6 @@ export default function Navbar() {
               </div>
             </PopoverContent>
           </Popover>
-
-          <Button variant="secondary">
-            <Link size={24} />
-          </Button>
-
-          <div className="relative inline-block">
-            <Button variant="secondary" onClick={handleNotificationClick}>
-              <Bell size={24} />
-            </Button>
-            {/* Notification count badge */}
-            <Badge className="absolute -top-2 -right-2 bg-red-500 text-white">
-              3
-            </Badge>
-          </div>
         </div>
       </div>
 

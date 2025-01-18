@@ -1,15 +1,8 @@
-
 import Analytics from "@/components/Analytics/page";
 import Friends from "@/components/friend_components/page";
-import { Task } from "@/components/Task";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import TaskPage from "@/components/Task";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import { useEffect, useState } from "react";
 
-// const [data, updateData] = useState<any>([]);
-
-//   useEffect(() => {
-//     updateData([
 //       {
 //         id: 1,
 //         title: "Sample test note completion",
@@ -33,43 +26,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function TopTabs() {
   return (
-    <Tabs defaultValue="Task" className="w-[350px]">
+    <Tabs defaultValue="Task" className="w-[400px]">
       <TabsList className=" grid w-full grid-cols-3 gap-1 bg-gray-100 rounded-md ">
-        <TabsTrigger value="Task" className=" bg-gray-200">Tasks</TabsTrigger>
-        <TabsTrigger value="Analytics" className="bg-gray-200">Analystics</TabsTrigger>
-        <TabsTrigger value="Friends" className="bg-gray-200">Friends</TabsTrigger>
+        <TabsTrigger value="Task" className=" bg-gray-200">
+          Tasks
+        </TabsTrigger>
+        <TabsTrigger value="Analytics" className="bg-gray-200">
+          Analystics
+        </TabsTrigger>
+        <TabsTrigger value="Friends" className="bg-gray-200">
+          Friends
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="Task">
-        <Card>
-            <CardHeader>
-                <CardTitle>Tasks</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <Task id={1} title={"abc"} dueDate={""} completeTask={undefined}/>
-            </CardContent>
-            </Card>
+        <TaskPage/>
       </TabsContent>
       <TabsContent value="Analytics">
-        <Card>
-            <CardHeader>
-                <CardTitle>Analytics</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <Analytics />
-            </CardContent>
-            </Card>
+        <Analytics />
       </TabsContent>
       <TabsContent value="Friends">
-        <Card>
-            <CardHeader>
-                <CardTitle>Friends</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <Friends/>
-            </CardContent>
-            </Card>
+        <Friends />
       </TabsContent>
     </Tabs>
-
   );
 }

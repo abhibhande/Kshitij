@@ -16,18 +16,18 @@ export default function App() {
   //   },
   //   [updateData]
   // );
-  
+
   const [showNav, setShowNav] = useState(false);
 function handlelogin() {
     setShowNav(true);
 }
   return (
-    <div className="App"> 
+    <div className="App "> 
     {!showNav?(
-       <Tabs defaultValue="login" className="w-[400px]">
-       <TabsList className="grid w-full grid-cols-2">
-         <TabsTrigger value="login">Login</TabsTrigger>
-         <TabsTrigger value="register">Register</TabsTrigger>
+       <Tabs defaultValue="login" className="w-[400px] mt-5">
+       <TabsList className="grid w-full grid-cols-2 gap-1  bg-gray-100 rounded-md">
+         <TabsTrigger value="login" className=' bg-gray-200'>Login</TabsTrigger>
+         <TabsTrigger value="register"  className=' bg-gray-200'>Register</TabsTrigger>
        </TabsList>
        <TabsContent value="login">
          <Card>

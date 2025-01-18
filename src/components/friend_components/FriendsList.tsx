@@ -1,13 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Check, Trash2, UserPlus } from "lucide-react";
+import {  UserMinus, UserPlus } from "lucide-react";
 
 type Friend = {
   id: string;
   name: string;
   imgUrl: string;
-  btnAction: "Remove" | "Accept" | "Request";
+  btnAction: "Follow" | "Unfollow";
 };
 
 const FriendList = ({
@@ -15,17 +15,15 @@ const FriendList = ({
   onAction,
 }: {
   data: Friend;
-  onAction: (id: string, action: "Remove" | "Accept" | "Request") => void; // Restrict to specific actions
+  onAction: (id: string, action: "Follow" | "Unfollow") => void; // Restrict to specific actions
 }) => {
   // Map action to specific icons
-  const getIcon = (action: "Remove" | "Accept" | "Request") => {
+  const getIcon = (action: "Follow" | "Unfollow") => {
     switch (action) {
-      case "Remove":
-        return <Trash2 />;
-      case "Accept":
-        return <Check />;
-      case "Request":
+      case "Follow":
         return <UserPlus />;
+      case "Unfollow":
+        return <UserMinus />;
       default:
         return null;
     }

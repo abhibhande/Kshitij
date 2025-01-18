@@ -1,6 +1,5 @@
-
-import * as React from "react"
-import { Label, Pie, PieChart } from "recharts"
+import * as React from "react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -9,21 +8,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Badge } from "../ui/badge"
-import { Button } from "../ui/button"
-import { ChevronRight } from "lucide-react"
+} from "@/components/ui/chart";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { ChevronRight } from "lucide-react";
 const chartData = [
   { status: "pending", progress: 275, fill: "var(--color-pending)" },
   { status: "inprogress", progress: 200, fill: "var(--color-inprogress)" },
   { status: "completed", progress: 287, fill: "var(--color-completed)" },
-]
+];
 
 const chartConfig = {
   progress: {
@@ -40,13 +39,13 @@ const chartConfig = {
   completed: {
     label: "Completed",
     color: "hsl(var(--chart-2))",
-  }
-} satisfies ChartConfig
+  },
+} satisfies ChartConfig;
 
 export function Component() {
   const totalProgress = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.progress, 0)
-  }, [])
+    return chartData.reduce((acc, curr) => acc + curr.progress, 0);
+  }, []);
 
   return (
     <Card className="flex flex-col">
@@ -96,27 +95,26 @@ export function Component() {
                           Progress
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
             </Pie>
           </PieChart>
         </ChartContainer>
-       <CardFooter>
-       <div className="grid grid-cols-3 gap-1 ">
-  <Badge className="bg-orange-600">Pending</Badge>
-  <Badge className="bg-yellow-500">Pending</Badge>
-  <Badge className="bg-teal-600">Pending</Badge>
-  
-  <Button variant={"outline"} className="col-span-3 ml-auto text-right mt-3">
-    View Details <ChevronRight/>
-  </Button>
-</div>
-
-       
-       </CardFooter>
       </CardContent>
+      <CardFooter className="flex justify-center pt-4">
+        <div className="flex justify-center space-x-4">
+          <Badge className="bg-orange-600">Pending</Badge>
+          <Badge className="bg-yellow-500">In Progress</Badge>
+          <Badge className="bg-teal-600">Completed</Badge>
+        </div>
+      </CardFooter>
+      <div className="flex justify-center items-center h-full">
+        <Button variant="default" className="justify-center w-[136px] mb-3">
+          In Details <ChevronRight />
+        </Button>
+      </div>
     </Card>
-  )
+  );
 }

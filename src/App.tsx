@@ -1,37 +1,89 @@
-import { useState, useEffect, useCallback } from 'react';
-import './App.css';
-import { Task } from './components/Task';
-function App() {
-  const [data, updateData] = useState<any>([]);
 
-  useEffect(() => {
-    updateData([
-      { id: 1, title: "Sample test note completion", dueDate: "10/01/2025:10:00" },
-      { id: 2, title: "Big task completion pending", dueDate: "10/01/2025:10:00" },
-      { id: 3, title: "Sample test note completion", dueDate: "10/01/2025:10:00" },
-    ]);
-  }, []);
 
-  const completeTask = useCallback(
-    (id: number) => {
-      updateData((prevTasks: any[]) => prevTasks.filter((task) => task.id !== id));
-    },
-    [updateData]
-  );
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Label } from './components/ui/label'
+import { Button } from './components/ui/button'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/ui/card'
+import { Input } from './components/ui/input'
+import { useState } from 'react'
+import Navbar from './components/Navbar/page'
+export default function App() {
 
-  return (
-    <>
-      {data.map((item: any) => (
-        <Task
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          dueDate={item.dueDate}
-          completeTask={completeTask}
-        />
-      ))}
-    </>
-  );
+
+  // const completeTask = useCallback(
+  //   (id: number) => {
+  //     updateData((prevTasks: any[]) => prevTasks.filter((task) => task.id !== id));
+  //   },
+  //   [updateData]
+  // );
+  
+  const [showNav, setShowNav] = useState(false);
+function handlelogin() {
+    setShowNav(true);
 }
-
-export default App;
+  return (
+    <div className="App"> 
+    {!showNav?(
+       <Tabs defaultValue="login" className="w-[400px]">
+       <TabsList className="grid w-full grid-cols-2">
+         <TabsTrigger value="login">Login</TabsTrigger>
+         <TabsTrigger value="register">Register</TabsTrigger>
+       </TabsList>
+       <TabsContent value="login">
+         <Card>
+           <CardHeader>
+             <CardTitle>Login</CardTitle>
+             <CardDescription>
+               Make changes to your account here. Click save when you're done.
+             </CardDescription>
+           </CardHeader>
+           <CardContent className="space-y-2">
+             <div className="space-y-1">
+               <Label htmlFor="name">Name</Label>
+               <Input id="name" defaultValue="Pedro Duarte" />
+             </div>
+             <div className="space-y-1">
+               <Label htmlFor="password">Password</Label>
+               <Input id="password" type='password' defaultValue="@peduarte" />
+             </div>
+           </CardContent>
+           <CardFooter>
+             <Button onClick={handlelogin}>Login</Button>
+           </CardFooter>
+         </Card>
+       </TabsContent>
+       <TabsContent value="register">
+         <Card>
+           <CardHeader>
+             <CardTitle>Register</CardTitle>
+             <CardDescription>
+               Register Yourself!!!
+             </CardDescription>
+           </CardHeader>
+           <CardContent className="space-y-2">
+             <div className="space-y-1">
+               <Label htmlFor="name">Name </Label>
+               <Input id="name" type="text" />
+             </div>
+             <div className="space-y-1">
+               <Label htmlFor="mail">Mail-id</Label>
+               <Input id="mail" type="mail" />
+             </div>
+             <div className="space-y-1">
+               <Label htmlFor="password">Password</Label>
+               <Input id="password" type="mail" />
+             </div>
+           </CardContent>
+           <CardFooter>
+             <Button >Register</Button>
+           </CardFooter>
+         </Card>
+       </TabsContent>
+     </Tabs>
+    ):
+    (<>
+      <Navbar />
+    </>)}
+    </div>
+  )
+}

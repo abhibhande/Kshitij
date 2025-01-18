@@ -1,4 +1,3 @@
-"use client"
 
 import * as React from "react"
 import { Label, Pie, PieChart } from "recharts"
@@ -18,6 +17,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
+import { ChevronRight } from "lucide-react"
 const chartData = [
   { status: "pending", progress: 275, fill: "var(--color-pending)" },
   { status: "inprogress", progress: 200, fill: "var(--color-inprogress)" },
@@ -103,11 +104,17 @@ export function Component() {
           </PieChart>
         </ChartContainer>
        <CardFooter>
-        <div className="grid grid-cols-3 gap-1 ">
-        <Badge variant="default" className="bg-orange-600 ">Pending</Badge>
-        <Badge variant="default" className="bg-yellow-500">Pending</Badge>
-        <Badge variant="default" className="bg-teal-600">Pending</Badge>
-        </div>
+       <div className="grid grid-cols-3 gap-1 ">
+  <Badge className="bg-orange-600">Pending</Badge>
+  <Badge className="bg-yellow-500">Pending</Badge>
+  <Badge className="bg-teal-600">Pending</Badge>
+  
+  <Button variant={"outline"} className="col-span-3 ml-auto text-right mt-3">
+    View Details <ChevronRight/>
+  </Button>
+</div>
+
+       
        </CardFooter>
       </CardContent>
     </Card>

@@ -3,10 +3,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { ArrowRight, BookmarkCheck, Pause, Play } from "lucide-react"
+import { ArrowRight, BookmarkCheck } from "lucide-react"
 import './css/task.css'
 import { Progress } from "./ui/progress"
-import { useEffect, useState } from "react"
 
 
 export function Task(props: { id: any,title:string,dueDate:string,completeTask:any }) {

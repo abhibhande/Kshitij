@@ -6,9 +6,24 @@ function App() {
 
   useEffect(() => {
     updateData([
-      { id: 1, title: "Sample test note completion", dueDate: "10/01/2025:10:00" },
-      { id: 2, title: "Big task completion pending", dueDate: "10/01/2025:10:00" },
-      { id: 3, title: "Sample test note completion", dueDate: "10/01/2025:10:00" },
+      {
+        id: 1,
+        title: "Sample test note completion",
+        dueDate: "10/01/2025:10:00",
+        desc: "Complete the sample test note for review and submission."
+      },
+      {
+        id: 2,
+        title: "Big task completion pending",
+        dueDate: "10/01/2025:10:00",
+        desc: "Finish the major task that has been marked as pending for the project deadline."
+      },
+      {
+        id: 3,
+        title: "Sample test note completion",
+        dueDate: "10/01/2025:10:00",
+        desc: "Ensure the sample test note is fully prepared for presentation."
+      }
     ]);
   }, []);
 
@@ -26,6 +41,7 @@ function App() {
           key={item.id}
           id={item.id}
           title={item.title}
+          desc={item.desc}
           dueDate={item.dueDate}
           completeTask={completeTask}
         />

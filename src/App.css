@@ -1,0 +1,24 @@
+/* Custom Scrollbar Styles */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #000000 transparent; /* Thumb and transparent track */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #1300e1; /* Solid color thumb */
+    border-radius: 4px; /* Smooth round thumb */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* No visible track */
+  }
+  
+  /* Prevent Horizontal Scrollbar */
+  .no-horizontal-scroll {
+    overflow-x: hidden;
+  }
+  

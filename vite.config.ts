@@ -26,6 +26,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+<<<<<<< HEAD
+      '@': path.resolve(__dirname, './src'), // Map "@" to "src"
+    },
+=======
       '@': path.resolve(__dirname, './src'),},
+>>>>>>> 2c3837984a941366cf7701c6510c227ac2328fd5
   },
 });

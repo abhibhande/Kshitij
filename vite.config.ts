@@ -16,6 +16,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    chunkSizeWarningLimit:1500,
     outDir: 'build',
     rollupOptions: {
       input: {
@@ -23,9 +24,8 @@ export default defineConfig({
       },
     },
   },
-  resolve:{
-    alias:{
-      '@':path.resolve(__dirname,'./src')
-    }
-  }
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),},
+  },
 });

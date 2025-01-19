@@ -5,7 +5,7 @@ import { Label } from './components/ui/label'
 import { Button } from './components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/ui/card'
 import { Input } from './components/ui/input'
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import Navbar from './components/Navbar/page'
 import { apiCall } from './api_utils/apiCall'
 export default function App() {
@@ -18,13 +18,13 @@ export default function App() {
   //   [updateData]
   // );
 
-  const [showNav, setShowNav] = useState(false);
+  // const [showNav, setShowNav] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 function handlelogin() {
   console.log("Email : ",email);
-  apiCall('http://localhost:8080/api/users/login?email='+email+'&password='+password, 'POST', {}, {  }).then((response) => {
+  apiCall('http://localhost:8080/api/users/login?email='+email+'&password='+password, 'POST', {}, {}).then((response) => {
       console.log("Response : ",response);
       if (response.token) {
         localStorage.setItem('token', response.token);
@@ -57,10 +57,12 @@ const handleNameChange = (e:any) => {
 }
 
 const [userPreferences, setUserPreferences] = useState(null);
+console.log(userPreferences);
+// ${localStorage.getItem("token")}
 
   return (
     <div className="App "> 
-    {!showNav?(
+    {!localStorage.getItem("token")?(
        <Tabs defaultValue="login" className="w-[400px] mt-5">
        <TabsList className="grid w-full grid-cols-2 gap-1  bg-gray-100 rounded-md">
          <TabsTrigger value="login" className=' bg-gray-200'>Login</TabsTrigger>

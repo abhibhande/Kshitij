@@ -1,9 +1,9 @@
 import {
-    Card,
+    // Card,
     CardTitle,
   } from "@/components/ui/card"
   import { Label } from "@/components/ui/label"
-  import { ArrowRight, BookmarkCheck, Pause, Play } from "lucide-react"
+  import {  BookmarkCheck} from "lucide-react"
   import './css/task.css'
 
 const TaskHeader = (props: { id: any,title:string,dueDate:string,completeTask:any ,onTaskHandler: () => void},

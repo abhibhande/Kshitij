@@ -7,16 +7,18 @@ import {
   Card,
 } from "@/components/ui/card"
 import './css/task.css'
-import {  useState } from "react"
+import {  useEffect, useState } from "react"
 import { Progress } from "@radix-ui/react-progress";
 import { ArrowRight } from "lucide-react";
 import { Label } from "recharts";
 import TaskHeader from "./TaskHeader";
+// import { apiCall } from '../api_utils/apiCall'
+import {  toast } from "react-toastify";
 
 type Task = {
   id: string;
-  date: Date;
-  status: "Completed" | "Pending" | "InProcess";
+  dueDate: string;
+  status: "Completed" | "Pending" | "In Progress";
   description: string;
 };
 let borderColor = "";
@@ -24,15 +26,70 @@ let cornerClass = "";
 
 
 const TaskPage = () => {
-  const allTasks: Task[] = [
-    { id: "1", date: new Date("2023-10-01"), status: "Completed", description: "This is a completed task description." },
-    { id: "2", date: new Date("2023-10-02"), status: "Pending", description: "This is a pending task description." },
-    { id: "3", date: new Date("2023-10-03"), status: "InProcess", description: "This is a task that is in process." },
-  ];
+//   const allTasks: Task[] = [
+//     { id: "1", dueDate: new Date("2023-10-01"), status: "Completed", description: "This is a completed task description." },
+//     { id: "2", dueDate: new Date("2023-10-02"), status: "Pending", description: "This is a pending task description." },
+//     { id: "3", dueDate: new Date("2023-10-03"), status: "InProcess", description: "This is a task that is in process." },
+//   ];
 
-  const [tasks] = useState<Task[]>(allTasks);
+  const [tasks,setTasks] = useState<Task[]>([]);
+  
+  useEffect(() => {
+    // Fetch tasks from the server
 
-  const getStatusBadge = (status: "Completed" | "Pending" | "InProcess") => {
+    console.log("Token : ",localStorage.getItem("token"));
+    apiCall('http://localhost:8080/api/task/getTasks', 'POST', {'X-Authorization': `${localStorage.getItem("token")}`}, null).then((response) => {
+      // const json = response;
+      // setTasks(json[1]);
+      console.log("Task : ",response.tasks);
+      setTasks(response.tasks);
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        setUserPreferences(response.userPreferences);
+      }
+    });
+  }, []);
+
+  function completeTask(id: any) {
+    alert("Task completed");
+    console.log("Token : ",localStorage.getItem("token"));
+    apiCall('http://localhost:8080/api/task/completeTask/'+id, 'POST', {'X-Authorization': `${localStorage.getItem("token")}`}, null).then(() => {
+
+      apiCall('http://localhost:8080/api/task/getTasks', 'POST', {'X-Authorization': `${localStorage.getItem("token")}`}, null).then((response) => {
+        if(response)
+            setTasks(response.tasks);  
+      });
+    });
+  }
+
+  const [userPreferences, setUserPreferences] = useState(null);
+console.log(userPreferences);
+  const handleRegister = async () => {
+    await apiCall(
+          "http://localhost:8080/api/task/getTasks",
+          "POST",
+          {
+            'X-Authorization': `Bearer ${localStorage.getItem("token")}`,
+          },
+          null
+        ).then((response) => {
+          console.log("Response : ", response);
+          if (response) {
+            toast.success("Task added successfully", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+          }
+        });
+  }
+  console.log(handleRegister);
+  
+
+  const getStatusBadge = (status: "Completed" | "Pending" | "In Progress") => {
  
 
     switch (status) {
@@ -52,7 +109,7 @@ const TaskPage = () => {
             <MdPending /> Pending
           </Badge>
         );
-      case "InProcess":
+      case "In Progress":
         borderColor = "2px solid yellow";
         cornerClass = "cornerYellow"; // Ensure this class exists in your CSS
         return (
@@ -72,7 +129,7 @@ const TaskPage = () => {
         <input type='hidden' value={borderColor}/>
       <div className="space-y-4">
         {tasks.map((task) => {
-          const { id, date, status, description } = task;
+          const { id, dueDate, status, description } = task;
           let borderColor = "";
           let cornerClass = "";
 
@@ -85,7 +142,7 @@ const TaskPage = () => {
               borderColor = "2px solid red";
               cornerClass = "cornerRed";
               break;
-            case "InProcess":
+            case "In Progress":
               borderColor = "2px solid yellow";
               cornerClass = "cornerYellow";
               break;
@@ -102,7 +159,10 @@ const TaskPage = () => {
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   {statusBadge}
-                  <span className="font-semibold text-lg">{date.toDateString()}</span>
+                  <span className="font-semibold text-lg">{dueDate.split("T")[0]}</span>
+                </div>
+                <div>
+                  {(!(status === "Completed"))&&(<button className="bg-green-700" onClick={() => completeTask(id)}>Complete</button>)}
                 </div>
               </div>
 
@@ -121,7 +181,7 @@ export default TaskPage;
 export function Task(props: { id: any,title:string,desc:string ,dueDate:string,completeTask:any }) {
     console.log("props",props);
     console.log("dueDate",props.dueDate);
-    const date = props.dueDate.split(":")[0];
+    // const date = props.dueDate.split("T")[0];
 
     const [isFlipped, setIsFlipped] = useState(false);
     const [translateY, setTranslateY] = useState(0);
@@ -165,7 +225,8 @@ export function Task(props: { id: any,title:string,desc:string ,dueDate:string,c
     
   )
     }
-    export async function apiCall(endpoint: string | URL | Request, method = "GET", headers = {}, payload = null) {
+    async function apiCall(endpoint: string | URL | Request, method = "POST", headers = {}, payload = null) {
+      console.log(payload);
         try {
           const response = await fetch(endpoint, {
             method: method,
@@ -173,7 +234,7 @@ export function Task(props: { id: any,title:string,desc:string ,dueDate:string,c
               "Content-Type": "application/json",
               ...headers,
             },
-            body: method !== "GET" && payload ? JSON.stringify(payload) : null,
+            body: method,
           });
       
           // Check if the response is successful

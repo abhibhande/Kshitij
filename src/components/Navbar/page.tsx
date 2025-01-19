@@ -45,12 +45,12 @@ export default function Navbar() {
       "http://localhost:8080/api/task/addTask",
       "POST",
       {
-        'X-Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'X-Authorization': `${localStorage.getItem("token")}`,
       },
       {
-        name: name,
+        title: name,
         description: description,
-        date: date,
+        dueDate: date,
       }
     ).then((response) => {
       console.log("Response : ", response);

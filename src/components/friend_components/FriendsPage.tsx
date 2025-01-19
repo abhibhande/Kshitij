@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody } from "@/components/ui/table";
 import FriendList from "./FriendsList";
+import { apiCall } from "@/api_utils/apiCall";
 import "@/components/css/friends.css";
 
 type Friend = {
@@ -24,6 +25,15 @@ const FriendPage = () => {
   // Filters and selected data
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [filteredData, setFilteredData] = useState<Friend[]>(allFriends);
+
+  useEffect(() => {
+    apiCall("http://localhost:8080/api/friends/friends", "GET", {'X-Authorization': `Bearer ${localStorage.getItem("token")}`}, {}).then((response) => {
+      console.log("Response : ", response);
+      // if (response) {
+      //   setFilteredData(response);
+      // }
+    });
+  }, []);
 
   // Handle filter selection
   const handleFilterClick = (filter: string) => {
